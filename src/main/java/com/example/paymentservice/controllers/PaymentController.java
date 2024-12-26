@@ -2,19 +2,19 @@ package com.example.paymentservice.controllers;
 
 import com.example.paymentservice.dtos.InitiatePaymentDto;
 import com.example.paymentservice.services.PaymentService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.paymentservice.services.ProductService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
 
     private PaymentService paymentService;
+    private ProductService productService;
 
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(PaymentService paymentService, ProductService productService) {
         this.paymentService = paymentService;
+        this.productService = productService;
     }
 
     @PostMapping
@@ -30,6 +30,11 @@ public class PaymentController {
         System.out.println(webhookEvent);
         //TODO can implement logic to save the details received into the database
         return "OK";
+    }
+
+    @GetMapping("/products/{id}")
+    public String getProductDetails(@PathVariable Long id) {
+        return productService.getProductDetails(id);
     }
 
 }
